@@ -24,7 +24,7 @@ int pop(STACK **stack) {
   return value;
 }
 
-void push(STACK **stack, int value) {
+int push(STACK **stack, int value) {
   // malloc is used so this memory can be accessed outside of scope
   STACK *head = malloc(sizeof(STACK));
   if (head) {
@@ -34,8 +34,9 @@ void push(STACK **stack, int value) {
     head->is_empty = 0;
     // stack now holds pointer to head
     *stack = head;
+    return 1;
   } else {
-    printf("push memory no alloc");
+    return -1;
   }
 }
 
