@@ -10,11 +10,17 @@ struct Stack {
   struct Stack *next;
 };
 
+int is_empty(STACK **stack) {
+  return (*stack)->is_empty != 0;
+}
+
 int pop(STACK **stack) {
-  assert((*stack)->is_empty != 1);
+  assert(!is_empty(stack));
+  STACK *copy = *stack;
   int value = (*stack)->value;
   // outer pointer (static) points to new stack now
   *stack = (*stack)->next;
+  free(copy);
   return value;
 }
 
@@ -43,10 +49,6 @@ STACK *new_stack() {
   } else {
     return NULL;
   }
-}
-
-int is_empty(STACK **stack) {
-  return (*stack)->is_empty != 0;
 }
 
 int peek(STACK **stack) {
