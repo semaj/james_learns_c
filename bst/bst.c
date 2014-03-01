@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <assert.h>
 
-typedef struct Node NODE;
+typedef struct node node;
 
-struct Node {
+struct node {
   int value;
   int is_leaf;
-  struct Node *right;
-  struct Node *left;
+  struct node *right;
+  struct node *left;
 };
 
-NODE *new_leaf(void) {
-  NODE *leaf = malloc(sizeof(NODE));
+node *new_leaf(void) {
+  node *leaf = malloc(sizeof(node));
   assert(leaf);
   leaf->is_leaf = 1;
   leaf->value = 0;
@@ -21,22 +21,23 @@ NODE *new_leaf(void) {
   return leaf;
 }
 
-int insert(NODE *node, int value) {
+int insert(node *node, int value) {
   assert(node);
   if (node->is_leaf) {
     node->is_leaf = 0;
     node->value = value;
     node->left = new_leaf();
     node->right = new_leaf();
+    return 1;
   } else if (node->value < value) {
     return insert(node->left, value);
   } else if (node->value > value) {
     return insert(node->right, value);
   }
-  return -1;
+  return 0;
 }
 
-int contains(NODE *node, int value) {
+int contains(node *node, int value) {
   assert(node);
   if (node->is_leaf) {
     return 0;
@@ -48,7 +49,7 @@ int contains(NODE *node, int value) {
   return 1;
 }
 
-int max_height(NODE *node) {
+int max_height(node *node) {
   assert(node);
   if (node->is_leaf) {
     return 0;
@@ -62,13 +63,17 @@ int max_height(NODE *node) {
   }
 }
 
-void destroy(NODE *tree) {
-  free(tree);
+void destroy(node *tree) {
+  if (tree) {
+    free(tree);
+    destroy(tree->left);
+    destroy(tree->right);
+  }
 }
   
 
 int main(void) {
-  NODE *tree = new_leaf();
+  node *tree = new_leaf();
   insert(tree, 7);
   printf("contains 7? : %d\n", contains(tree, 7));
   insert(tree, 6);
