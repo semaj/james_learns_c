@@ -5,6 +5,16 @@
 
 typedef struct linked_list linked_list;
 typedef struct cons cons;
+/* cons is the Racket equivalent of Lisp's car */
+struct cons {
+  int value;
+  cons *next;
+};
+
+struct linked_list {
+  int size;
+  cons *list;
+};
 
 void linked_list_append(linked_list *ll, int value);
 int size(linked_list *ll);
